@@ -92,14 +92,8 @@ class Demo(QtWidgets.QMainWindow):
     def draw_board(self):
         for i in range(self.r_size):
             for j in range(self.c_size):
-                pixmap = QPixmap(f"{self.gem_state[i][j]}.png")
-                pixmap = pixmap.scaled(
-                    self.scale,
-                    self.scale,
-                    aspectRatioMode=Qt.AspectRatioMode.KeepAspectRatio,
-                    transformMode=Qt.TransformationMode.SmoothTransformation,
-                )
-                self.gem_graph[i][j].setBrush(QBrush(pixmap))
+                gem_id = self.gem_state[i][j]
+                self.gem_graph[i][j].setBrush(QBrush(self.gem_pixmaps[gem_id]))
 
     # 检查消除并调用填充和掉落方法
     def update(self):
@@ -220,7 +214,7 @@ class Demo(QtWidgets.QMainWindow):
                 self.gem_state[i1][j1], self.gem_state[i2][j2] = self.gem_state[i2][j2], self.gem_state[i1][j1]
                 self.draw_board()
                 QtWidgets.QApplication.processEvents()
-                QTimer.singleShot(500, self.update)  # 每次交换后等一段时间，实现视觉上交换之后的画面
+                QTimer.singleShot(self.frame_time, self.update)  # 每次交换后等一段时间，实现视觉上交换之后的画面
             else:
                 self.selected_gems.clear()
 
